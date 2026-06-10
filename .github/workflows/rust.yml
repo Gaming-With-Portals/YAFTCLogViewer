@@ -15,14 +15,14 @@ jobs:
         include:
           - os: ubuntu-latest
             container: fedora:latest
-            artifact_name: YA_FtcLogViewer
-            asset_name: YA_FtcLogViewer-linux
+            artifact_name: FTCLogViewer
+            asset_name: FTCLogViewer-linux
           - os: windows-latest
-            artifact_name: YA_FtcLogViewer.exe
-            asset_name: YA_FtcLogViewer-windows.exe
+            artifact_name: FTCLogViewer.exe
+            asset_name: FTCLogViewer-windows.exe
           - os: macos-latest
-            artifact_name: YA_FtcLogViewer
-            asset_name: YA_FtcLogViewer-macos
+            artifact_name: FTCLogViewer
+            asset_name: FTCLogViewer-macos
 
     runs-on: ${{ matrix.os }}
     container: ${{ matrix.container }}
