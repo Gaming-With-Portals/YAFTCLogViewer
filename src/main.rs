@@ -91,7 +91,7 @@ impl LogFile {
             .collect();
         
         let mut op_starts : Vec<usize> = events.iter()
-            .filter(|e| e.info.contains("Robot Controller starting OpMode"))
+            .filter(|e| e.info.contains("Robot Controller starting OpMode") || e.info.contains("START - OPMODE"))
             .filter(|e| !e.info.contains("$Stop$Robot$")) // what is this
             .map(|e| e.line_idx)
             .collect();
@@ -228,12 +228,29 @@ impl eframe::App for App {
 
                 let op_starts: Vec<usize> = self.log_file.op_starts.clone();
                 let mut labels: Vec<String> = op_starts.iter()
-                    .map(|&line_idx| self.log_file.event_map
+                    .map(|&line_idx| {
+                        let info = self.log_file.event_map
                         .get(&line_idx)
-                        .and_then(|e| e.info.split(':').last())
-                        .unwrap_or("Unknown")
+                        .map(|e| e.info.as_str())
+                        .unwrap_or("");
+
+                    if info.contains("START - OPMODE"){
+                        info.split("START - OPMODE")
+                        .nth(1)
+                        .unwrap_or("UNKNOWN")
                         .trim()
-                        .to_string() + " - OpMode Start")
+                        .trim_matches('*')
+                        .trim()
+                        .to_string()   
+                    } else {
+                        info.split(":")
+                        .last()
+                        .unwrap_or("UNKNOWN")
+                        .trim().to_string()
+                    }
+
+                    })
+                    .map(|name| name + " - OpMode Start")
                     .collect();
 
                 if (labels.len() > 1){
