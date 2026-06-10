@@ -1,0 +1,35 @@
+name: Rust
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+env:
+  CARGO_TERM_COLOR: always
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            container: fedora:latest
+          - os: windows-latest
+          - os: macos-latest
+    runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container }}
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install Rust (Fedora)
+      if: matrix.container == 'fedora:latest'
+      run: |
+        dnf install -y gcc rustup
+        rustup-init -y
+        echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+    - name: Install Rust (Windows/macOS)
+      if: matrix.os == 'windows-latest' || matrix.os == 'macos-latest'
+      uses: dtolnay/rust-toolchain@stable
+
+    - name: Build
+      run: cargo build --verbose
