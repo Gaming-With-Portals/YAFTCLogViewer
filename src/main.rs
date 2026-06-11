@@ -216,8 +216,8 @@ impl eframe::App for App {
             ui.horizontal(|ui|{
                 let changed =
                     ui.checkbox(&mut self.show_verbose, "Show Verbose").changed() |
-                    ui.checkbox(&mut self.show_info,    "Show Debug").changed() |
-                    ui.checkbox(&mut self.show_debug, "Show Info").changed() |
+                    ui.checkbox(&mut self.show_debug,    "Show Debug").changed() |
+                    ui.checkbox(&mut self.show_info, "Show Info").changed() |
                     ui.checkbox(&mut self.show_warning, "Show Warning").changed() |
                     ui.checkbox(&mut self.show_error,   "Show Error").changed();
                 if changed { self.rebuild_filter(); }
